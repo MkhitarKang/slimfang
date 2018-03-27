@@ -19,7 +19,7 @@ app.controller('onloadCtrl', function ($scope, $http) {
     .success(function (Data) {  
         console.log(Data);
         $scope.names = Data[0];  
-        $scope.all = parseInt(Data[1][0].maxdata / parseInt($scope.pagedata)); //总页数 
+        $scope.all = parseInt(Data[1][0].maxdata / parseInt($scope.pagedata))+1; //总页数 
         console.log($scope.all);
         console.log($scope.curr);
         console.log($scope.count);
