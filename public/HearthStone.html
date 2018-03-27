@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html ng-app="HearthStone">
+    <head>
+        <meta charset="UTF-8">
+        <script src="http://cdn.static.runoob.com/libs/angular.js/1.4.6/angular.min.js"></script>
+        <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+        <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+        <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
+        <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+        <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+        <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <script src="/javascripts/HearthStone.js"></script> 
+        <title>炉石传说新卡发布</title>
+        <link rel="stylesheet" href="/stylesheets/admin.css">
+    </head>
+    <body>
+        <div class="container-fluid" ng-controller="onloadCtrl">  
+            <div class="row">  
+                <div class="col-md-12">  
+                    <!--面板开始-->  
+                    <div class="panel panel-primary">  
+                        <!--面板标题/头部-->  
+                        <div class="panel-heading">  
+                            炉石传说新卡发布  
+                        </div>  
+                        <!--面板内容开始-->  
+                        <div>  
+                            <div class="panel-body">
+                                <!--搜索工具栏开始-->
+                                <div class="input-group col-md-2 pull-right">  
+                                    <input type="text" placeholder="请输入要搜索的关键字" class="form-control" ng-model="id" />  
+                                    <div class="input-group-btn">  
+                                        <button type="button" class="btn btn-info">  
+                                        搜索  
+                                        <span class="glyphicon glyphicon-search"></span>  
+                                    </button>  
+                                    </div>  
+                                </div>  
+                                <!--搜索工具栏结束-->  
+                                <!--按钮工具栏开始-->  
+                                <div class="btn-group pull-right">  
+                                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal">  
+                                        <span class=" glyphicon glyphicon-plus"></span> 添加  
+                                    </button>  
+                                    <button type="button" class="btn btn-primary" ng-click="deleteHearth(x)">  
+                                        <span class="glyphicon glyphicon-remove"></span> 删除  
+                                    </button>  
+                                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#myModal" ng-click="editHearth(x)">  
+                                        <span class="glyphicon glyphicon-edit"></span> 编辑  
+                                    </button>  
+                                </div>  
+                                <!--按钮工具栏结束-->
+                            </div>
+                            <div class="panel-body">
+                                <!--绑定表格开始-->  
+                                <table id="tb" class="table table-striped table-bordered table-hover table-responsive">  
+                                    <tr>  
+                                        <!--表头，这只排序字段，-->  
+                                        <th><input type="checkbox" id="ck_all" ng-model="selectAll" /></th>  
+                                        <th class="col-md-1">序号</th>  
+                                        <th class="col-md-1" ng-click="col='Cdnm';desc=!desc">卡牌名称<span class="caret"></span></th>  
+                                        <th class="col-md-1" ng-click="col='Classes';desc=!desc">职业<span class="caret"></span></th>  
+                                        <th class="col-md-1" ng-click="col='Cost';desc=!desc">费用<span class="caret"></span></th>  
+                                        <th class="col-md-1" ng-click="col='Figure';desc=!desc">身材<span class="caret"></span></th>  
+                                        <th class="col-md-1" ng-click="col='Cdlvl';desc=!desc">品质<span class="caret"></span></th>  
+                                        <th class="col-md-6">卡牌描述</th>  
+                                        <!--<th>编辑</th>  
+                                    <th>删除</th>-->  
+                                    </tr>  
+                                    <!--重复项开始，设置排序字段，数据源，names代表数据源，x表示names中遍历的每一个对象，id表示模糊搜索输入的内容，要与输入的input的ng-model一致，col表示排序名称，要与表头中一致-->  
+                                    <tr ng-repeat="x in names | filter: id | orderBy:col:desc">  
+                                        <td><input type="checkbox" name="cbx" value="{{x.Cdnm}}" ng-click="isSelected(x)" ng-checked="selectAll" /></td>  
+                                        <td class="col-md-1">{{x.Cdid}}</td>  
+                                        <td class="col-md-1">{{x.Cdnm}}</td>  
+                                        <td class="col-md-1">{{x.Classes}}</td>  
+                                        <td class="col-md-1">{{x.Cost}}</td>  
+                                        <td class="col-md-1">{{x.Figure}}</td>  
+                                        <td class="col-md-1">{{x.Cdlvl}}</td>  
+                                        <td class="col-md-6">{{x.describe}}</td>  
+                                        <!--<td>  
+                                        <button class="btn btn-default btn-sm" ng-click="editHearth(x)" data-toggle="modal" data-target="#myModal">编辑</button>  
+                                        <td>  
+                                        <button class="btn btn-default btn-sm" ng-click="deleteHearth(x)">删除</button>  
+                                    </td>-->  
+                                    </tr>  
+                                </table>  
+                                <!--绑定表格结束-->
+                                <nav class="text-center">
+                                    <ul class="pagination">
+                                        <li ng-click="pageClick(p)" ng-repeat="p in page">
+                                            <a href="#">{{p}}</a>
+                                        </li>
+                                    </ul> 
+                                </nav>
+                            </div>  
+                        </div>  
+                        <!--面板内容开始-->  
+                        <!-- Modal弹框内容 -->  
+                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">  
+                            <div class="modal-dialog" role="document">  
+                                <div class="modal-content">  
+                                    <div class="modal-body">  
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>  
+                                        <form class="col-md-12">  
+                                            <span class="help-block col-md-2">序号</span>  
+                                            <div class="form-group col-md-10">  
+                                                <input type="text" class="form-control" ng-model="hearthstone.Cdid" />  
+                                            </div>  
+                                            <span class="help-block col-md-2">卡牌名称</span>  
+                                            <div class="form-group col-md-10">  
+                                                <input type="text" class="form-control" ng-model="hearthstone.Cdnm" />  
+                                            </div>  
+                                            <span class="help-block col-md-2">职业</span>  
+                                            <div class="form-group col-md-10">  
+                                                    <input type="text" class="form-control" ng-model="hearthstone.Classes" />  
+                                                </div>  
+                                            <span class="help-block col-md-2">费用</span>  
+                                            <div class="form-group col-md-10">  
+                                                <input type="text" class="form-control" ng-model="hearthstone.Cost" />  
+                                            </div>  
+                                            <span class="help-block col-md-2">身材</span>  
+                                            <div class="form-group col-md-10">  
+                                                <input type="text" class="form-control" ng-model="hearthstone.Figure" />  
+                                            </div>  
+                                            <span class="help-block col-md-2">品质</span>  
+                                            <div class="form-group col-md-10">  
+                                                <input type="text" class="form-control" ng-model="hearthstone.Cdlvl" />  
+                                            </div> 
+                                            <span class="help-block col-md-2">卡牌描述</span>  
+                                            <div class="form-group col-md-10">  
+                                                <input type="text" class="form-control" ng-model="hearthstone.describe" />  
+                                            </div>  
+                                        </form>  
+                                        <button type="button" class="btn btn-info" data-dismiss="modal">  
+                                        取消  
+                                        <span class="glyphicon glyphicon-share-alt"></span>  
+                                        </button>  
+                                            <button type="button" class="btn btn-primary">  
+                                            <span class="glyphicon glyphicon-saved" ng-click="addHearth(hearthstone)"></span>保存  
+                                        </button>  
+                                    </div>  
+                                </div>  
+                            </div>  
+                        </div>  
+                        <!--模态框弹窗-->  
+                    </div>  
+                    <!--面板结束-->  
+                </div>  
+            </div> 
+        </div>  
+    </body>
+</html>
