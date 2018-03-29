@@ -1,25 +1,15 @@
 var app = angular.module('HearthStone', []);  
 app.controller('onloadCtrl', function ($scope, $http) {   
-//建议一定这样写，不要用$http.post('DataSource.ashx',{'data':'all'}),否则后台request["data]获取不到参数，我也不知道为什么  
-//  $http({  
-//      method: 'POST',  
-//      url: 'DataSorce.ashx',  
-//      params: {  
-//          'data': 'all'  
-//      }  
-//  })
 
     $scope.curr = 1;  //当前页数
     $scope.count = 5,  //最多显示的页数
     $scope.pagedata = 5,  //每页最多显示的卡牌数
     
 // 20180324 Mkhitaryan
-//    $http.get('/data/HearthInfo.json')  
-    $http.get("http://localhost:3000/HearthStone/list",{params:{currentpage:'initall', pagedata:$scope.pagedata}})
+    $http.get("http://localhost:3000/HearthStone/list",{params:{currentpage:'initall'}})
     .success(function (Data) {  
         console.log(Data);
-        $scope.names = Data[0];  
-        $scope.all = parseInt(Data[1][0].maxdata / parseInt($scope.pagedata))+1; //总页数 
+        $scope.all = parseInt(Data[0].maxdata / parseInt($scope.pagedata))+1; //总页数 
         console.log($scope.all);
         console.log($scope.curr);
         console.log($scope.count);
@@ -27,7 +17,7 @@ app.controller('onloadCtrl', function ($scope, $http) {
     });
 
 
-    //绑定点击事件
+    //页码点击事件
     $scope.pageClick = function (page) {
         if (page == '«') {
             page = 1;
@@ -38,22 +28,19 @@ app.controller('onloadCtrl', function ($scope, $http) {
         else if (page > $scope.all) page = $scope.all;
         //点击相同的页数 不执行点击事件
         if (page == $scope.curr) return;
-        if ($scope.click && typeof $scope.click === 'function') {
-            $scope.click(page);
-            $scope.curr = page;
-            $scope.page = getRange($scope.curr, $scope.all, $scope.count);
-        }
+        $scope.curr = page;
+        console.log("curr="+page);
+        $scope.page = getRange($scope.curr, $scope.all, $scope.count);
     };
 
-    //点击页数的回调函数
-    $scope.click= function (page) {
-        $http.get("http://localhost:3000/HearthStone/list",{params:{currentpage:page, pagedata:$scope.pagedata}})
+    //监听SQL
+    $scope.$watch('curr', function(){   
+        $http.get("http://localhost:3000/HearthStone/list",{params:{currentpage:$scope.curr, pagedata:$scope.pagedata}})
         .success(function (Data) {
             console.log(Data);  
             $scope.names = Data;  
         });
-        console.log(page);
-    }
+    });
 
     //返回页数范围（用来遍历）
     function getRange(curr, all, count) {

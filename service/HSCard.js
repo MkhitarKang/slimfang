@@ -26,7 +26,7 @@ exports.list = function(req, res) {
     // 画面初始化
     if (param.currentpage == 'initall'){
 
-        connection.query(userSQL.queryAll + userSQL.queryMaxPage, [0,parseInt(param.pagedata)], function(error, result, fields) {  
+        connection.query(userSQL.queryData, function(error, result, fields) {  
             
             if (error) throw error;
 
