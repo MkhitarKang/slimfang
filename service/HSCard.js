@@ -24,9 +24,10 @@ exports.list = function(req, res) {
     var param = req.query || req.params; 
 
     // 画面初始化
-    if (param.currentpage == 'initall'){
+    if (param.currentpage == "initall"){
 
-        connection.query(userSQL.queryData, function(error, result, fields) {  
+        var query = connection.query(userSQL.queryData + " " + userSQL.queryKey + ";",
+        [param.searchkey], function(error, result, fields) {  
             
             if (error) throw error;
 
@@ -37,17 +38,20 @@ exports.list = function(req, res) {
             connection.release();  
     
             });
+
+         console.log(query.sql); 
+
         }
    else {
     // 翻页
         var cardorder = param.cardesc.substring(0, param.cardesc.length - 1);
 
-        var cardesc = param.cardesc.charAt(param.cardesc.length - 1)=="a" ? " asc " : " desc ";
+        var cardesc = param.cardesc.charAt(param.cardesc.length - 1)=="a" ? "asc" : "desc";
         
         var currentdata = (parseInt(param.currentpage)-1)*parseInt(param.pagedata)
 
-        var query = connection.query(userSQL.queryAll + cardorder + cardesc + userSQL.limitData,
-            [currentdata,parseInt(param.pagedata)], function(error, result, fields) {
+        var query = connection.query(userSQL.queryAll + " " + userSQL.queryKey + " order by " + cardorder + " " + cardesc + " " + userSQL.limitData + ";",
+        [param.searchkey,currentdata,parseInt(param.pagedata)], function(error, result, fields) {
             
             if (error) throw error;
 

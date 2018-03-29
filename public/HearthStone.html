@@ -29,12 +29,11 @@
                             <div class="panel-body">
                                 <!--搜索工具栏开始-->
                                 <div class="input-group col-md-2 pull-right">  
-                                    <input type="text" placeholder="请输入要搜索的关键字" class="form-control" ng-model="id" />  
+                                    <input type="text" placeholder="请输入要搜索的关键字" class="form-control" ng-model="key" />  
                                     <div class="input-group-btn">  
-                                        <button type="button" class="btn btn-info">  
-                                        搜索  
-                                        <span class="glyphicon glyphicon-search"></span>  
-                                    </button>  
+                                        <button type="button" class="btn btn-info" ng-click="searchkey= '%'+key+'%'; curr=1">  
+                                        搜索  <span class="glyphicon glyphicon-search"></span>  
+                                        </button>  
                                     </div>  
                                 </div>  
                                 <!--搜索工具栏结束-->  
@@ -69,7 +68,7 @@
                                     <th>删除</th>-->  
                                     </tr>  
                                     <!--重复项开始，设置排序字段，数据源，names代表数据源，x表示names中遍历的每一个对象，id表示模糊搜索输入的内容，要与输入的input的ng-model一致，col表示排序名称，要与表头中一致-->  
-                                    <tr ng-repeat="x in names | filter: id">  
+                                    <tr ng-repeat="x in names | filter: key">  
                                         <td><input type="checkbox" name="cbx" value="{{x.Cdnm}}" ng-click="isSelected(x)" ng-checked="selectAll" /></td>  
                                         <td class="col-md-1">{{x.Cdid}}</td>  
                                         <td class="col-md-1">{{x.Cdnm}}</td>  

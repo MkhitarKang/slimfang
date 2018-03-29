@@ -5,16 +5,24 @@ app.controller('onloadCtrl', function ($scope, $http) {
     $scope.count = 5,  //最多显示的页数
     $scope.pagedata = 5,  //每页最多显示的卡牌数
     $scope.cardesc = 'Cdida',  //排序方式
+    $scope.searchkey = '%%',  //排序方式
     
 // 20180324 Mkhitaryan
-    $http.get("http://localhost:3000/HearthStone/list",{params:{currentpage:'initall'}})
-    .success(function (Data) {  
-        console.log(Data);
-        $scope.all = parseInt(Data[0].maxdata / parseInt($scope.pagedata))+1; //总页数 
-        console.log($scope.all);
-        console.log($scope.curr);
-        console.log($scope.count);
-        $scope.page = getRange($scope.curr, $scope.all, $scope.count);
+    $scope.$watch('searchkey', function(){
+        $http.get("http://localhost:3000/HearthStone/list",
+        {params:{currentpage:'initall', searchkey:$scope.searchkey}})
+        .success(function (Data) {  
+            console.log(Data);
+            if(Data[0].maxdata % parseInt($scope.pagedata)){
+                $scope.all = parseInt(Data[0].maxdata / parseInt($scope.pagedata))+1; 
+            }else{
+                $scope.all = parseInt(Data[0].maxdata / parseInt($scope.pagedata)); 
+            }//总页数  
+            console.log($scope.all);
+            console.log($scope.curr);
+            console.log($scope.count);
+            $scope.page = getRange($scope.curr, $scope.all, $scope.count);
+        });
     });
 
     //页码点击事件
@@ -34,8 +42,9 @@ app.controller('onloadCtrl', function ($scope, $http) {
     };
 
     //监听SQL
-    $scope.$watch('curr + cardesc', function(){   
-        $http.get("http://localhost:3000/HearthStone/list",{params:{currentpage:$scope.curr, pagedata:$scope.pagedata,cardesc:$scope.cardesc}})
+    $scope.$watch('curr + cardesc + searchkey', function(){   
+        $http.get("http://localhost:3000/HearthStone/list",
+        {params:{currentpage:$scope.curr, pagedata:$scope.pagedata, cardesc:$scope.cardesc, searchkey:$scope.searchkey}})
         .success(function (Data) {
             console.log(Data);  
             $scope.names = Data;  
@@ -49,7 +58,7 @@ app.controller('onloadCtrl', function ($scope, $http) {
         all = parseInt(all);
         count = parseInt(count);
         var from = curr - parseInt(count / 2);
-        var to = curr + parseInt(count / 2) + (count % 2) - 1;
+        var to = from + count - 1;
         //显示的页数容处理
         if (from <= 0) {
             from = 1;
