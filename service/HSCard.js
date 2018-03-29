@@ -40,9 +40,15 @@ exports.list = function(req, res) {
         }
    else {
     // 翻页
-        var currentdata = (parseInt(param.currentpage)-1)*parseInt(param.pagedata)
-        connection.query(userSQL.queryAll, [currentdata,parseInt(param.pagedata)], function(error, result, fields) {
+        var cardorder = param.cardesc.substring(0, param.cardesc.length - 1);
 
+        var cardesc = param.cardesc.charAt(param.cardesc.length - 1)=="a" ? " asc " : " desc ";
+        
+        var currentdata = (parseInt(param.currentpage)-1)*parseInt(param.pagedata)
+
+        var query = connection.query(userSQL.queryAll + cardorder + cardesc + userSQL.limitData,
+            [currentdata,parseInt(param.pagedata)], function(error, result, fields) {
+            
             if (error) throw error;
 
             // 查询结果返回  
@@ -52,6 +58,9 @@ exports.list = function(req, res) {
             connection.release();  
     
             });
+
+        console.log(query.sql); 
+
         }
     }
 )};

@@ -58,18 +58,18 @@
                                     <tr>  
                                         <!--表头，这只排序字段，-->  
                                         <th><input type="checkbox" id="ck_all" ng-model="selectAll" /></th>  
-                                        <th class="col-md-1">序号</th>  
-                                        <th class="col-md-1" ng-click="col='Cdnm';desc=!desc">卡牌名称<span class="caret"></span></th>  
-                                        <th class="col-md-1" ng-click="col='Classes';desc=!desc">职业<span class="caret"></span></th>  
-                                        <th class="col-md-1" ng-click="col='Cost';desc=!desc">费用<span class="caret"></span></th>  
-                                        <th class="col-md-1" ng-click="col='Figure';desc=!desc">身材<span class="caret"></span></th>  
-                                        <th class="col-md-1" ng-click="col='Cdlvl';desc=!desc">品质<span class="caret"></span></th>  
+                                        <th class="col-md-1" ng-click="cardesc= cardesc == 'Cdida' ? 'Cdidd' : 'Cdida'; curr=1">序号<span class="caret"></span></th>  
+                                        <th class="col-md-1" ng-click="cardesc= cardesc == 'Cdnma' ? 'Cdnmd' : 'Cdnma'; curr=1">卡牌名称<span class="caret"></span></th>  
+                                        <th class="col-md-1" ng-click="cardesc= cardesc == 'Classesa' ? 'Classesd' : 'Classesa'; curr=1">职业<span class="caret"></span></th>  
+                                        <th class="col-md-1" ng-click="cardesc= cardesc == 'Costa' ? 'Costd' : 'Costa'; curr=1">费用<span class="caret"></span></th>  
+                                        <th class="col-md-1" ng-click="cardesc= cardesc == 'Figurea' ? 'Figured' : 'Figurea'; curr=1">身材<span class="caret"></span></th>  
+                                        <th class="col-md-1" ng-click="cardesc= cardesc == 'Cdlvla' ? 'Cdlvld' : 'Cdlvla'; curr=1">品质<span class="caret"></span></th>  
                                         <th class="col-md-6">卡牌描述</th>  
                                         <!--<th>编辑</th>  
                                     <th>删除</th>-->  
                                     </tr>  
                                     <!--重复项开始，设置排序字段，数据源，names代表数据源，x表示names中遍历的每一个对象，id表示模糊搜索输入的内容，要与输入的input的ng-model一致，col表示排序名称，要与表头中一致-->  
-                                    <tr ng-repeat="x in names | filter: id | orderBy:col:desc">  
+                                    <tr ng-repeat="x in names | filter: id">  
                                         <td><input type="checkbox" name="cbx" value="{{x.Cdnm}}" ng-click="isSelected(x)" ng-checked="selectAll" /></td>  
                                         <td class="col-md-1">{{x.Cdid}}</td>  
                                         <td class="col-md-1">{{x.Cdnm}}</td>  

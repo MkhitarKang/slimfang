@@ -4,6 +4,7 @@ app.controller('onloadCtrl', function ($scope, $http) {
     $scope.curr = 1;  //当前页数
     $scope.count = 5,  //最多显示的页数
     $scope.pagedata = 5,  //每页最多显示的卡牌数
+    $scope.cardesc = 'Cdida',  //排序方式
     
 // 20180324 Mkhitaryan
     $http.get("http://localhost:3000/HearthStone/list",{params:{currentpage:'initall'}})
@@ -15,7 +16,6 @@ app.controller('onloadCtrl', function ($scope, $http) {
         console.log($scope.count);
         $scope.page = getRange($scope.curr, $scope.all, $scope.count);
     });
-
 
     //页码点击事件
     $scope.pageClick = function (page) {
@@ -34,8 +34,8 @@ app.controller('onloadCtrl', function ($scope, $http) {
     };
 
     //监听SQL
-    $scope.$watch('curr', function(){   
-        $http.get("http://localhost:3000/HearthStone/list",{params:{currentpage:$scope.curr, pagedata:$scope.pagedata}})
+    $scope.$watch('curr + cardesc', function(){   
+        $http.get("http://localhost:3000/HearthStone/list",{params:{currentpage:$scope.curr, pagedata:$scope.pagedata,cardesc:$scope.cardesc}})
         .success(function (Data) {
             console.log(Data);  
             $scope.names = Data;  
